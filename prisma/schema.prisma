@@ -1,0 +1,68 @@
+// Gerador do cliente Prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Configuração da fonte de dados (PostgreSQL)
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // Usa a variável do .env
+}
+
+// Aqui começam os modelos (tabelas do banco)
+enum UserRole {
+  CLIENT
+  PROVIDER
+  ADMIN
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  name      String
+  email     String     @unique
+  password  String
+  phone     String?
+  role      UserRole   @default(CLIENT) 
+  createdAt DateTime   @default(now())
+  appointments Appointment[]
+  services Service[] // <- adiciona esta linha
+
+}
+
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELED
+}
+
+model Appointment {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  date        DateTime
+  status      AppointmentStatus @default(PENDING)
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  serviceId   Int
+  service     Service           @relation(fields: [serviceId], references: [id]) 
+}
+
+
+model Service {
+  id              Int      @id @default(autoincrement())
+  name            String
+  description     String
+  availableDays   String       // Ex: "Segunda a Sexta"
+  dailyHours      String       // Ex: "4h/dia"
+  duration        String       // Ex: "1 semana", "Sob demanda"
+  attendanceType  String       // Ex: "Online", "Presencial"
+  location        String       // Ex: "Remoto", "A domicílio"
+  price           Float
+  providerId      Int
+  provider        User     @relation(fields: [providerId], references: [id])
+  createdAt       DateTime @default(now())
+
+  appointments Appointment[] 
+
+}
