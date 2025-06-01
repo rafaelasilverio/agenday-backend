@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from 'src/user/dto/login-user.dto';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
@@ -35,7 +35,7 @@ export class AuthController {
   async login(@Body() dto: LoginUserDto) {
     const user = await this.authService.validateUser(dto.email, dto.password);
     if (!user) {
-      return { message: 'Email ou senha inválidos' };
+      throw new UnauthorizedException('Email ou senha inválidos');
     }
     return this.authService.login(user);
   }

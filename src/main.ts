@@ -3,7 +3,13 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
+
+   // Habilita o CORS para o Angular local
+  app.enableCors({
+    origin: 'http://localhost:4200', // Front-end Angular
+    credentials: true               // Permite cookies ou headers com autenticação
+  });
 
   // Configuração básica do Swagger
   const config = new DocumentBuilder()
