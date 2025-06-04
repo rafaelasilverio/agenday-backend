@@ -1,20 +1,22 @@
-import { Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
+import { Injectable, ForbiddenException, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 
 @Injectable()
 export class ServiceService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
-  async create(providerId: number, dto: CreateServiceDto) {
+  async create(dto: CreateServiceDto, userId: number) {
+    if (!userId) throw new BadRequestException('UserId não pode ser undefined!');
     return this.prisma.service.create({
       data: {
         ...dto,
-        providerId,
+        providerId: userId,
       },
     });
   }
+
 
   async findAll() {
     return this.prisma.service.findMany({

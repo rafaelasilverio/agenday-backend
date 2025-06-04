@@ -1,10 +1,4 @@
-export class UpdateServiceDto {
-  name?: string;
-  description?: string;
-  availableDays?: string;
-  dailyHours?: string;
-  duration?: string;
-  attendanceType?: string;
-  location?: string;
-  price?: number;
-}
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateServiceDto } from './create-service.dto';
+
+export class UpdateServiceDto extends PartialType(CreateServiceDto) {}

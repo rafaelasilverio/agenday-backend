@@ -13,10 +13,10 @@ export class UserService {
         data: {
           ...data,
           password: hashedPassword,
-          role: data.role ?? 'CLIENT', // Garante role padrão
+          role: data.role ?? 'CLIENT',
         },
       });
-      console.log('Recebido para criação de usuário:', data);
+
       return { id: user.id, email: user.email };
     } catch (error) {
       if (error.code === 'P2002' && error.meta?.target?.includes('email')) {

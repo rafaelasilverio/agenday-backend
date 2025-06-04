@@ -53,16 +53,22 @@ model Service {
   id              Int      @id @default(autoincrement())
   name            String
   description     String
-  availableDays   String       // Ex: "Segunda a Sexta"
-  dailyHours      String       // Ex: "4h/dia"
-  duration        String       // Ex: "1 semana", "Sob demanda"
-  attendanceType  String       // Ex: "Online", "Presencial"
-  location        String       // Ex: "Remoto", "A domicílio"
+  category        String
+  availableDays   String
+  dailyHours      String
+  duration        String
+  attendanceType  String
+  location        String
+  cep             String
+  neighborhood    String
+  city            String
+  contact         String
   price           Float
+  paymentMethod   String
+  image           String
   providerId      Int
   provider        User     @relation(fields: [providerId], references: [id])
   createdAt       DateTime @default(now())
-
-  appointments Appointment[] 
-
+  appointments    Appointment[]
 }
+
