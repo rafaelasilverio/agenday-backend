@@ -26,6 +26,7 @@ export class AuthService {
       role: user.role,
     };
 
+    // O segredo do JWT deve ser definido via variável de ambiente para maior segurança
     return {
       access_token: this.jwtService.sign(payload),
     };

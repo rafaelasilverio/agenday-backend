@@ -37,6 +37,16 @@ export class AuthController {
     if (!user) {
       throw new UnauthorizedException('Email ou senha inválidos');
     }
-    return this.authService.login(user);
+    const loginResult = await this.authService.login(user);
+    // Retorna também dados básicos do usuário
+    return {
+      ...loginResult,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    };
   }
 }
