@@ -8,10 +8,14 @@ export class ServiceService {
   constructor(private prisma: PrismaService) { }
 
   async create(dto: CreateServiceDto, userId: number) {
-    if (!userId) throw new BadRequestException('UserId não pode ser undefined!');
+    const daysString = Array.isArray(dto.availableDays)
+      ? dto.availableDays.join(', ')
+      : dto.availableDays as string;
+
     return this.prisma.service.create({
       data: {
         ...dto,
+        availableDays: daysString,
         providerId: userId,
       },
     });
@@ -31,14 +35,18 @@ export class ServiceService {
     });
   }
 
+  // src/service/service.service.ts
   async update(id: number, providerId: number, dto: UpdateServiceDto) {
-    const service = await this.prisma.service.findUnique({ where: { id } });
-    if (!service) throw new NotFoundException('Serviço não encontrado');
-    if (service.providerId !== providerId) throw new ForbiddenException('Você não tem permissão para editar este serviço');
+    const updateData: any = { ...dto };
+    if (dto.availableDays !== undefined) {
+      updateData.availableDays = Array.isArray(dto.availableDays)
+        ? dto.availableDays.join(', ')
+        : dto.availableDays;
+    }
 
     return this.prisma.service.update({
       where: { id },
-      data: dto,
+      data: updateData,
     });
   }
 

@@ -17,7 +17,8 @@ export class ServiceController {
   @Post()
   @Roles('PROVIDER')
   create(@Body() dto: CreateServiceDto, @Request() req) {
-    return this.serviceService.create(dto, req.user.sub);
+    const userId = Number(req.user.userId ?? req.user.sub);
+    return this.serviceService.create(dto, userId);
   }
 
   @Get()
@@ -28,18 +29,25 @@ export class ServiceController {
   @Get('mine')
   @Roles('PROVIDER')
   findMine(@Request() req) {
-    return this.serviceService.findMine(req.user.sub);
+    const userId = Number(req.user.userId ?? req.user.sub);
+    return this.serviceService.findMine(userId);
   }
 
   @Put(':id')
   @Roles('PROVIDER')
-  update(@Request() req, @Param('id') id: string, @Body() dto: UpdateServiceDto) {
-    return this.serviceService.update(+id, req.user.sub, dto);
+  update(
+    @Request() req,
+    @Param('id') id: string,
+    @Body() dto: UpdateServiceDto,
+  ) {
+    const userId = Number(req.user.userId ?? req.user.sub);
+    return this.serviceService.update(+id, userId, dto);
   }
 
   @Delete(':id')
   @Roles('PROVIDER')
   remove(@Request() req, @Param('id') id: string) {
-    return this.serviceService.remove(+id, req.user.sub);
+    const userId = Number(req.user.userId ?? req.user.sub);
+    return this.serviceService.remove(+id, userId);
   }
 }

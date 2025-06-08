@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsArray } from 'class-validator';
 
 export class CreateServiceDto {
   @IsString()
@@ -11,8 +11,9 @@ export class CreateServiceDto {
   @IsString()
   category: string;
 
-  @IsString()
-  availableDays: string;
+  @IsArray()
+  @IsString({ each: true })
+  availableDays: string[];
 
   @IsString()
   dailyHours: string;
