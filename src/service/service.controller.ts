@@ -9,11 +9,11 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
 
-@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('services')
 export class ServiceController {
   constructor(private readonly serviceService: ServiceService) { }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
   @Roles('PROVIDER')
   create(@Body() dto: CreateServiceDto, @Request() req) {
@@ -27,6 +27,7 @@ export class ServiceController {
   }
 
   @Get('mine')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('PROVIDER')
   findMine(@Request() req) {
     const userId = Number(req.user.userId ?? req.user.sub);
@@ -34,6 +35,7 @@ export class ServiceController {
   }
 
   @Put(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('PROVIDER')
   update(
     @Request() req,
@@ -45,6 +47,7 @@ export class ServiceController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('PROVIDER')
   remove(@Request() req, @Param('id') id: string) {
     const userId = Number(req.user.userId ?? req.user.sub);

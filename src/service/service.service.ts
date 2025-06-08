@@ -25,6 +25,9 @@ export class ServiceService {
   async findAll() {
     return this.prisma.service.findMany({
       orderBy: { createdAt: 'desc' },
+      include: {
+        provider: { select: { name: true } }
+      },
     });
   }
 
