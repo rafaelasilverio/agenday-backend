@@ -1,4 +1,3 @@
-// src/service/service.controller.ts
 import {
   Controller, Post, Get, Put, Delete, Param, Body, Request, UseGuards,
 } from '@nestjs/common';
@@ -17,8 +16,9 @@ export class ServiceController {
   @Post()
   @Roles('PROVIDER')
   create(@Body() dto: CreateServiceDto, @Request() req) {
+    const { dataInicio, dataFim, horaInicio, horaFim, ...dtoLimpo } = dto as any;
     const userId = Number(req.user.userId ?? req.user.sub);
-    return this.serviceService.create(dto, userId);
+    return this.serviceService.create(dtoLimpo, userId);
   }
 
   @Get()
@@ -42,8 +42,10 @@ export class ServiceController {
     @Param('id') id: string,
     @Body() dto: UpdateServiceDto,
   ) {
+    // Remove campos que não existem no backend
+    const { dataInicio, dataFim, horaInicio, horaFim, ...dtoLimpo } = dto as any;
     const userId = Number(req.user.userId ?? req.user.sub);
-    return this.serviceService.update(+id, userId, dto);
+    return this.serviceService.update(+id, userId, dtoLimpo);
   }
 
   @Delete(':id')

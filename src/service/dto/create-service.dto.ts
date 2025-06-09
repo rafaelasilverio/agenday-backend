@@ -47,4 +47,10 @@ export class CreateServiceDto {
 
   @IsString()
   image: string;
+
+  @IsString()
+  dataInicio?: string;
+
+  @IsString()
+  dataFim?: string;
 }

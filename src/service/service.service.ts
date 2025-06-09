@@ -1,4 +1,4 @@
-import { Injectable, ForbiddenException, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
@@ -10,7 +10,7 @@ export class ServiceService {
   async create(dto: CreateServiceDto, userId: number) {
     const daysString = Array.isArray(dto.availableDays)
       ? dto.availableDays.join(', ')
-      : dto.availableDays as string;
+      : dto.availableDays || '';
 
     return this.prisma.service.create({
       data: {
@@ -20,7 +20,6 @@ export class ServiceService {
       },
     });
   }
-
 
   async findAll() {
     return this.prisma.service.findMany({
@@ -38,13 +37,12 @@ export class ServiceService {
     });
   }
 
-  // src/service/service.service.ts
   async update(id: number, providerId: number, dto: UpdateServiceDto) {
     const updateData: any = { ...dto };
     if (dto.availableDays !== undefined) {
       updateData.availableDays = Array.isArray(dto.availableDays)
         ? dto.availableDays.join(', ')
-        : dto.availableDays;
+        : dto.availableDays || '';
     }
 
     return this.prisma.service.update({

@@ -65,7 +65,9 @@ model Service {
   contact         String
   price           Float
   paymentMethod   String
-  image           String
+  image           String    @map("images")
+  dataInicio      DateTime?
+  dataFim         DateTime?
   providerId      Int
   provider        User     @relation(fields: [providerId], references: [id])
   createdAt       DateTime @default(now())
